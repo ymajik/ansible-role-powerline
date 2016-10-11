@@ -11,12 +11,14 @@
   become: yes
 
 - name: Check if tmux is installed
-  command: which tmux
+  command: rpm -q tmux
   become: yes
   register: check_tmux
 
 - name: Install package powerline-tmux if tmux is installed
-  dnf: name="tmux-powerline" state=present
+  dnf:
+    name: tmux-powerline
+    state: present
   become: yes
   when: check_tmux.rc == 0
 
@@ -26,6 +28,8 @@
   register: check_vim
 
 - name: Install package vim-powerline if vim is installed
-  dnf: name="vim-powerline" state=present
+  dnf:
+    name: vim-powerline
+    state: present
   become: yes
   when: check_vim.rc == 0
