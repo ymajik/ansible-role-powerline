@@ -1,5 +1,7 @@
 # Ansible Role: powerline
 
+[![Build Status](https://travis-ci.org/ymajik/ansible-role-powerline.svg?branch=master)](https://travis-ci.org/ymajik/ansible-role-powerline)
+
 An Ansible role that installs powerline on Linux.
 
 ## Requirements
