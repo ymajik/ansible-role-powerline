@@ -10,11 +10,16 @@
     path: /etc/profile.d/powerline.sh
     state: absent
 
+<<<<<<< HEAD
 - name: ensure powerline script is installed
+=======
+- name: "Install powerline script"
+>>>>>>> master_af_up
   template:
     src: powerline.sh.j2
     dest: /etc/bash_powerline.sh
 
+<<<<<<< HEAD
 - name: retrieve the list of home directories
   command: ls /home
   register: home_dirs
@@ -28,18 +33,74 @@
   with_items: "{{ powerline_users }}"
 
 - name: ensure default top theme for powerline is configured
+=======
+- name: "Configure top theme for powerline"
+>>>>>>> master_af_up
   lineinfile:
     dest: "{{ powerline_config_file }}"
     line: "\t\t\"default_top_theme\": \"{{ powerline_default_top_theme }}\","
     regexp: "default_top_theme"
     insertbefore: "term_truecolor"
 
+<<<<<<< HEAD
 - name: ensure powerline for shell is configured
+=======
+- name: "Configure powerline for shell"
+>>>>>>> master_af_up
   template:
     src: powerline-shell.json.j2
     dest: "{{ powerline_themes_directory }}/shell/default.json"
 
+<<<<<<< HEAD
 - name: ensure powerline for tmux is configured
   template:
     src: powerline-tmux.json.j2
     dest: "{{ powerline_themes_directory }}/tmux/default.json"
+=======
+- name: "Enable powerline in bash shell"
+  lineinfile:
+    dest: "{{ item }}/.bashrc"
+    line: "source /etc/bash_powerline.sh"
+  become: yes
+  with_items: "{{ powerline_home_dirs }}"
+
+- name: "Configure powerline for tmux"
+  template:
+    src: powerline-tmux.json.j2
+    dest: "{{ powerline_themes_directory }}/tmux/default.json"
+  become: yes
+
+- name: "Check if tmux-powerline is installed"
+  stat: path="/usr/share/tmux/powerline.conf"
+  register: check_tmux_conf
+
+- name: "Enable powerline for tmux"
+  lineinfile:
+    dest: "{{ item }}/.tmux.conf"
+    line: "source /usr/share/tmux/powerline.conf"
+    create: yes
+    mode: 0644
+  become: yes
+  with_items: "{{ powerline_home_dirs }}"
+  when: check_tmux_conf.stat.exists == True
+
+- name: "Check if vim-powerline is installed"
+  stat: path="/usr/share/vim/vimfiles/plugin/powerline.vim"
+  register: check_vim_powerline
+
+- name: "Enable powerline for vim"
+  blockinfile:
+    dest: "{{ item }}/.vimrc"
+    block: |
+      python3 from powerline.vim import setup as powerline_setup
+      python3 powerline_setup()
+      python3 del powerline_setup
+      set laststatus=2
+      set t_Co=256
+    create: yes
+    mode: 0644
+    marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+  become: yes
+  with_items: "{{ powerline_home_dirs }}"
+  when: check_vim_powerline.stat.exists == True
+>>>>>>> master_af_up
