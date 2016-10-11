@@ -8,8 +8,6 @@
   with_items:
     - powerline
     - powerline-docs
-<<<<<<< HEAD
-=======
   become: yes
 
 - name: Check if tmux is installed
@@ -31,4 +29,3 @@
   dnf: name="vim-powerline" state=present
   become: yes
   when: check_vim.rc == 0
->>>>>>> master_af_up
